@@ -47,6 +47,12 @@ public class Launcher extends Application{
         // node 1.2
         Button playButton = new Button("Enter the World");
 
+        // Animation
+        playButton.setTranslateY(500);
+        TranslateTransition slideUp = new TranslateTransition(Duration.seconds(3), playButton);
+        slideUp.setToY(0);
+
+        slideUp.play();
             // properties
         playButton.setStyle(
                 "-fx-background-color:  #f5f5dc"
