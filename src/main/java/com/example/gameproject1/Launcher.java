@@ -3,9 +3,11 @@ package com.example.gameproject1;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -15,7 +17,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
-
+import javafx.scene.image.Image;
+//import javax.swing.text.html.ImageView;
 import java.awt.*;
 
 import static javafx.scene.input.KeyCode.*;
@@ -49,7 +52,7 @@ public class Launcher extends Application{
 
         // Animation
         playButton.setTranslateY(500);
-        TranslateTransition slideUp = new TranslateTransition(Duration.seconds(3), playButton);
+        TranslateTransition slideUp = new TranslateTransition(Duration.seconds(2), playButton);
         slideUp.setToY(0);
 
         slideUp.play();
@@ -83,8 +86,19 @@ public class Launcher extends Application{
 
         // node 1.1
         // adding the player
-        javafx.scene.image.Image playerImage = new javafx.scene.image.Image(getClass().getResourceAsStream("/ch1.png"));
-        javafx.scene.image.ImageView player = new javafx.scene.image.ImageView(playerImage);
+       // javafx.scene.image.Image playerImage = new javafx.scene.image.Image(getClass().getResourceAsStream("/ch1.png"));
+        //javafx.scene.image.ImageView player = new javafx.scene.image.ImageView(playerImage);
+
+        // something new from the tile sheet
+        Image tileset = new Image(getClass().getResourceAsStream("/tilemap_packed.png"));
+        ImageView player = new ImageView(tileset);
+
+        int TILE_SIZE = 16;
+        int col = 1;
+        int row = 8;
+        Rectangle2D characterRect = new Rectangle2D(col * TILE_SIZE  , row * TILE_SIZE + 1, TILE_SIZE, TILE_SIZE);
+        player.setViewport(characterRect);
+
 
         // properties
         player.setFitWidth(40);
@@ -136,8 +150,11 @@ public class Launcher extends Application{
                 case DOWN:
                     player.setY(player.getY() + movementSpeed);break;
                 case RIGHT:
-                    player.setX(player.getX() + movementSpeed);break;
+                    player.setScaleX(1);
+                    player.setX(player.getX() + movementSpeed);
+                    break;
                 case LEFT:
+                    player.setScaleX(-1);
                     player.setX(player.getX() - movementSpeed);break;
                 default: break;
 
