@@ -1,5 +1,6 @@
 package com.example.gameproject1;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -20,13 +22,15 @@ import javafx.util.Duration;
 import javafx.scene.image.Image;
 //import javax.swing.text.html.ImageView;
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static javafx.scene.input.KeyCode.*;
 
 public class Launcher extends Application{
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
 
         // procedure
         // start from base node
@@ -40,7 +44,7 @@ public class Launcher extends Application{
         // making scene
 
         // node 1.1
-            // Label and buttons
+        // Label and buttons
         Label title = new Label("Welcome to the Game Human");
 
         // properties
@@ -56,11 +60,11 @@ public class Launcher extends Application{
         slideUp.setToY(0);
 
         slideUp.play();
-            // properties
+        // properties
         playButton.setStyle(
                 "-fx-background-color:  #f5f5dc"
         );
-            // events
+        // events
         playButton.setOnMouseEntered(e -> playButton.setStyle("-fx-background-color: #ff7f50"));
         playButton.setOnMouseExited(e -> playButton.setStyle("-fx-background-color:  #f5f5dc"));
 
@@ -68,14 +72,14 @@ public class Launcher extends Application{
         VBox uiLayerMainScreen = new VBox();
         uiLayerMainScreen.getChildren().addAll(title, playButton);
         uiLayerMainScreen.setAlignment(Pos.CENTER);
-        VBox.setMargin(title, new Insets(0,0,50,0));
+        VBox.setMargin(title, new Insets(0, 0, 50, 0));
 
 
         // root scene 1
         StackPane root = new StackPane();
         root.getChildren().addAll(uiLayerMainScreen);
-            // properties
-        root.setBackground(new Background( new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        // properties
+        root.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         root.setAlignment(Pos.CENTER);
 
 
@@ -86,7 +90,7 @@ public class Launcher extends Application{
 
         // node 1.1
         // adding the player
-       // javafx.scene.image.Image playerImage = new javafx.scene.image.Image(getClass().getResourceAsStream("/ch1.png"));
+        // javafx.scene.image.Image playerImage = new javafx.scene.image.Image(getClass().getResourceAsStream("/ch1.png"));
         //javafx.scene.image.ImageView player = new javafx.scene.image.ImageView(playerImage);
 
         // something new from the tile sheet
@@ -96,7 +100,7 @@ public class Launcher extends Application{
         int TILE_SIZE = 16;
         int col = 1;
         int row = 8;
-        Rectangle2D characterRect = new Rectangle2D(col * TILE_SIZE  , row * TILE_SIZE + 1, TILE_SIZE, TILE_SIZE);
+        Rectangle2D characterRect = new Rectangle2D(col * TILE_SIZE, row * TILE_SIZE + 1, TILE_SIZE, TILE_SIZE);
         player.setViewport(characterRect);
 
 
@@ -106,8 +110,6 @@ public class Launcher extends Application{
         player.setX(0);
         player.setY(0);
         player.setPreserveRatio(true);
-
-
 
 
         // map screen switching
@@ -131,7 +133,6 @@ public class Launcher extends Application{
         Scene map1 = new Scene(map1Layout, 400, 300);
 
 
-
         playButton.setOnAction(
                 e -> {
                     primaryStage.setScene(map1);
@@ -139,27 +140,37 @@ public class Launcher extends Application{
                 }
         );
         btdBackToMain.setOnAction(e -> primaryStage.setScene(s));
+
         // input settings
-        map1.setOnKeyPressed(event -> {
-            // taking contant speed
-            double movementSpeed = 10;
+        //THE FOLLOWING SHOULD BE ADDED IN TEH ACTUAL PLAYER CLASS! OR TO SOME INTERFACE
 
-            switch (event.getCode()){
-                case UP:
-                    player.setY(player.getY() - movementSpeed); break;
-                case DOWN:
-                    player.setY(player.getY() + movementSpeed);break;
-                case RIGHT:
-                    player.setScaleX(1);
-                    player.setX(player.getX() + movementSpeed);
-                    break;
-                case LEFT:
-                    player.setScaleX(-1);
-                    player.setX(player.getX() - movementSpeed);break;
-                default: break;
+        // adding a key buffer to smooth the movement
+        Set<KeyCode> inputBuffer = new HashSet<>();
 
+        map1.setOnKeyPressed(event -> inputBuffer.add(event.getCode()));
+        map1.setOnKeyReleased(event -> inputBuffer.remove(event.getCode()));
+
+//        now in the animation timer... check for the input buffer
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double speed = 5.0;
+                if (inputBuffer.contains(KeyCode.W) || inputBuffer.contains(KeyCode.UP)) {
+                    player.setY(player.getY() - speed);
+                }
+                if (inputBuffer.contains(KeyCode.S) || inputBuffer.contains(KeyCode.DOWN)) {
+                    player.setY(player.getY() + speed);
+                }
+                if (inputBuffer.contains(KeyCode.A) || inputBuffer.contains(KeyCode.LEFT)) {
+                    player.setX(player.getX() - speed);
+                }
+                if (inputBuffer.contains(KeyCode.D) || inputBuffer.contains(KeyCode.RIGHT)) {
+                    player.setX(player.getX() + speed);
+                }
             }
-        });
+        };
+        timer.start();
+
 
 
 //        stages
