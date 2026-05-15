@@ -23,7 +23,7 @@ public class Player implements Movable{
         //        String imagePath
         createPlayer();
 //        inputSetUp();
-        setUpAnimation();
+//        setUpAnimation();
 
         //        // Load the image from the resources folder
 //        Image image = new Image(getClass().getResourceAsStream(imagePath));
@@ -59,10 +59,10 @@ public class Player implements Movable{
 
 
         // properties
-        player.setFitWidth(40);
-        player.setFitHeight(40);
-        player.setX(180);
-        player.setY(130);
+        player.setFitWidth(15);
+        player.setFitHeight(15);
+        player.setX(200);
+        player.setY(150);
         player.setPreserveRatio(true);
 
     }
@@ -75,20 +75,24 @@ public class Player implements Movable{
     }
 
     // now in the animation timer... check for the input buffer
-    // checks again and again in the move
-    private void setUpAnimation(){
-        timer = new AnimationTimer(){
-            @Override
-            public void handle(long now){
-                move();
-            }
-        };
-        timer.start();
-    }
+//    // checks again and again in the move
+//    private void setUpAnimation(){
+//        timer = new AnimationTimer(){
+//            @Override
+//            public void handle(long now){
+//                move();
+////                double offsetX = GAME_WIDTH / 2 - player.getX();
+////                double offsetY = GAME_HEIGHT / 2 - player.getY();
+////                gameLayer.setTranslateX(offsetX);
+////                gameLayer.setTranslateY(offsetY);
+//            }
+//        };
+//        timer.start();
+//    }
 
     // move and add in the buffer!!
     public void move(){
-        double speed = 5.0;
+        double speed = 1.2;
         if (inputBuffer.contains(KeyCode.W) || inputBuffer.contains(KeyCode.UP)) {
             player.setY(player.getY() - speed);
         }
@@ -103,6 +107,12 @@ public class Player implements Movable{
             player.setX(player.getX() + speed);
             player.setScaleX(1);
         }
+    }
+    double getX(){
+        return player.getX();
+    }
+    double getY(){
+        return player.getY();
     }
 
     public ImageView getSprite(){

@@ -35,6 +35,12 @@ public class Launcher extends Application{
     @Override
     public void start(Stage primaryStage) {
 
+
+
+
+
+
+
         // procedure
         // start from base node
         // add to the upper node (container) by getchildren.addall()
@@ -55,7 +61,7 @@ public class Launcher extends Application{
 //        title.setTextFill(Color.WHITE);
 //
 //        // node 1.2
-//        Button playButton = new Button("Enter the World");
+//        Button playButton = new Button("Enter the World");. 
 //
 //        // Animation
 //        playButton.setTranslateY(500);
@@ -79,6 +85,7 @@ public class Launcher extends Application{
 
 //        MainScreen mainScreen = new MainScreen(primaryStage);
 //        GameScene gameScene = new GameScene(primaryStage);
+
 
         SceneManager sceneManager = new SceneManager(primaryStage);
 
